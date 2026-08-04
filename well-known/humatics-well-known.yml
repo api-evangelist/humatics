@@ -1,0 +1,160 @@
+generated: '2026-08-04'
+method: probed
+source: live GET/DNS/TLS probes of /.well-known/* and agent-discovery paths on every Humatics host
+rounds:
+- round: 1
+  date: '2026-08-04'
+  result: complete negative on every /.well-known/ path, /llms.txt, spec path and agent-card path
+- round: 2
+  date: '2026-08-04'
+  result: >-
+    Re-probed independently. Every negative above reconfirmed. Three corrections and one new
+    finding, all recorded below: (a) humatics.com/wp-json/ answers HTTP 200 with a full
+    WordPress REST API discovery document — the only machine-readable HTTP interface on any
+    Humatics host, and it is the marketing site's CMS, not a product API; (b) *.humatics.com is
+    a DNS wildcard onto 3.224.140.94, so api./docs./developer./portal./status./trust. all
+    RESOLVE but time out on connect — round 1 recorded these as DNS failures, which was wrong in
+    mechanism though right in conclusion; (c) support.humatics.com is a CNAME onto
+    humaticshelp.zendesk.com — a real but unpublished Zendesk instance, not the Cloudflare 1034
+    round 1 recorded.
+notes: >-
+  Recorded so a later round does not re-probe blind. humatics.com is a WordPress site on
+  Pantheon fronted by Fastly; every /.well-known/ path, /llms.txt and /agents.md answers HTTP
+  404 with the site's HTML 404 page — a real 404, not a bot wall and not an SPA catch-all
+  returning 200. www.humatics.com behaves identically. No RFC 9116 security.txt, no OIDC/OAuth
+  authorization-server metadata, no RFC 9728 protected-resource metadata, no api-catalog, no
+  ai-plugin.json, and no A2A agent card at either the canonical /.well-known/agent-card.json or
+  the legacy /.well-known/agent.json exists on any Humatics host. No apis.yml pointer is wired
+  from this file, because nothing scoreable was found — this is a probe record, not a discovery
+  surface, and wiring a WellKnown or APICatalog pointer at an all-404 result would assert a
+  discovery posture Humatics does not have.
+hosts:
+- host: https://humatics.com
+  platform: WordPress on Pantheon, fronted by Fastly
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/oauth-protected-resource, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+  - {path: /.well-known/mcp.json, status: 404}
+  - {path: /llms.txt, status: 404}
+  - {path: /agents.md, status: 404}
+  - {path: /robots.txt, status: 200, result: standard-wordpress-robots}
+  - {path: /sitemap.xml, status: 200, result: 'redirects to wp-sitemap.xml; 8 pages, 1 post'}
+  - {path: /wp-json/, status: 200, result: wordpress-rest-api-discovery-document,
+     file: humatics-wp-json-index.json}
+  - {path: /feed/, status: 200, result: 'rss; single default "Hello world!" post dated 2025-02-11'}
+- host: https://www.humatics.com
+  platform: WordPress on Pantheon, fronted by Fastly
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/oauth-protected-resource, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+  - {path: /.well-known/mcp.json, status: 404}
+  - {path: /llms.txt, status: 404}
+  - {path: /agents.md, status: 404}
+dns:
+  wildcard: true
+  wildcard_note: >-
+    *.humatics.com resolves to a single A record, 3.224.140.94 — the retired HubSpot host that
+    used to serve now.humatics.com. Any invented subdomain therefore answers DNS. Resolution is
+    NOT evidence a host exists; every one of these times out on TCP connect on both 80 and 443.
+unresolved_or_dead_hosts:
+- {host: api.humatics.com, dns: 3.224.140.94, result: wildcard-a-record-connect-timeout}
+- {host: docs.humatics.com, dns: 3.224.140.94, result: wildcard-a-record-connect-timeout}
+- {host: developer.humatics.com, dns: 3.224.140.94, result: wildcard-a-record-connect-timeout}
+- {host: portal.humatics.com, dns: 3.224.140.94, result: wildcard-a-record-connect-timeout}
+- {host: app.humatics.com, dns: 3.224.140.94, result: wildcard-a-record-connect-timeout}
+- {host: cloud.humatics.com, dns: 3.224.140.94, result: wildcard-a-record-connect-timeout}
+- {host: milo.humatics.com, dns: 3.224.140.94, result: wildcard-a-record-connect-timeout}
+- {host: status.humatics.com, dns: 3.224.140.94, result: wildcard-a-record-connect-timeout,
+   note: no status page exists}
+- {host: trust.humatics.com, dns: 3.224.140.94, result: wildcard-a-record-connect-timeout,
+   note: no trust center exists}
+- {host: now.humatics.com, dns: 3.224.140.94, result: connect-timeout,
+   note: retired HubSpot news host that carried the KinetIQ and Spatial Intelligence Platform announcements}
+- host: support.humatics.com
+  dns: CNAME humaticshelp.zendesk.com -> 216.198.54.2, 216.198.53.2
+  result: zendesk-instance-not-public
+  status: 403
+  note: >-
+    A real Zendesk instance is provisioned, but the help centre is not published — the branded
+    host and humaticshelp.zendesk.com/hc/en-us both return HTTP 403 anonymously, and the
+    anonymous Help Center API (/api/v2/help_center/en-us/categories.json) returns Not Found.
+    Nothing on humatics.com links to it. No Support or HelpCenter pointer is wired, because
+    there is no publicly reachable support surface.
+contract_discovery:
+  openapi: none
+  swagger: none
+  graphql: none
+  asyncapi: none
+  grpc: none
+  mcp: none
+  agent_card: none
+  wordpress_rest: present
+  wordpress_rest_note: >-
+    https://humatics.com/wp-json/ returns HTTP 200 application/json, 330,601 bytes: a complete
+    WordPress REST API discovery document advertising 19 namespaces (wp/v2, wp-block-editor/v1,
+    wp-site-health/v1, wp-abilities/v1, oembed/1.0, batch/v1, plus plugin namespaces for
+    Elementor, Elementor Pro, Elementor AI, UAEL, FluentForm, HubSpot leadin, Redirection,
+    Google Site Kit, Really Simple Security, bsf-core and nps-survey) across 375 routes, 114 of
+    them under /wp/v2. Authentication is advertised as WordPress application passwords. This is
+    stock WordPress core plus commercial plugins — the CMS behind an eight-page marketing site.
+    It carries no Humatics positioning, ranging, MILO, FOCUS or HRNS capability, so it is NOT
+    registered as an API in apis.yml and no OpenAPI is derived from it. It is recorded as
+    evidence, excerpted to well-known/humatics-wp-json-index.json, because it is the single
+    machine-readable HTTP interface Humatics operates and a later round should not mistake it
+    for a product contract.
+  probed_spec_paths:
+  - {url: 'https://humatics.com/openapi.json', status: 404}
+  - {url: 'https://humatics.com/openapi.yaml', status: 404}
+  - {url: 'https://humatics.com/swagger.json', status: 404}
+  - {url: 'https://humatics.com/api-docs', status: 404}
+  - {url: 'https://humatics.com/docs', status: 404}
+  - {url: 'https://humatics.com/graphql', status: 404}
+  - {url: 'https://humatics.com/wp-json/', status: 200, result: wordpress-cms-rest-api}
+negative_findings:
+  note: >-
+    Searches outside /.well-known/ run in round 2, recorded here so later rounds inherit the
+    result instead of re-running them. Each is a genuine, checked absence.
+  package_registries:
+  - {registry: npm, query: humatics,
+     result: 'no package (404); a full-text registry search for "humatics" returns 0 objects'}
+  - {registry: pypi, query: humatics, result: 'no project (404)'}
+  github_org:
+    url: https://github.com/Humatics
+    public: true
+    repo_count: 33
+    first_party_repos: 2
+    result: >-
+      Re-enumerated via the GitHub API. 31 of 33 repositories are forks of third-party embedded,
+      robotics and build-system open source (eProsima Fast-RTPS and Fast-CDR, IDL-Parser, asio,
+      tinyxml2, FreeRTOS, Orange Pi H6 BSP/u-boot/kernel/toolchain/build, Yocto meta-tq and
+      meta-dumpling, mender-convert, EIPScanner, Fusion, u8g2, xsens_standalone, ethz_piksi_ros,
+      donkeycar, Cinder, Cinder-ImGui, asciimatics, android-ifaddrs, hub, hoppscotch, plus two
+      2026 hackathon forks). The only two non-forks are Doodlebot5000 (Python, no description)
+      and RaiLTools (JavaScript, described by Humatics as a "Collection of vibe coded tools").
+      There is no first-party SDK, client library, .proto, OpenAPI, AsyncAPI or JSON Schema in
+      the organization.
+  blog:
+    url: https://humatics.com/feed/
+    status: 200
+    result: >-
+      A WordPress RSS feed exists and returns 200, but it carries exactly one post — the stock
+      "Hello world!" placeholder dated 2025-02-11. Humatics runs no blog. No Blog or BlogRSS
+      pointer is wired; doing so would claim a content channel that does not exist.
+  site_size:
+    pages: 8
+    result: >-
+      The full published site is /, /milo/, /mobility/, /about/, /contact/, /terms-of-use/,
+      /privacy-policy/ and an unlinked /home-3/ draft. There is no developers, docs, api,
+      pricing, sign-up, status, security, trust, roadmap, changelog or support page to point at.

@@ -1,17 +1,50 @@
 aid: humatics
 name: Humatics
-description: 'Humatics is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: 'Humatics Corporation is a Waltham, Massachusetts microlocation company
+  founded in 2015 by MIT professor David Mindell and led by CEO James Kinsey. It builds
+  radio-frequency positioning systems — ultra-wideband beacons, RF-pulse ranging, radar
+  and inertial sensors fused in software — that locate people, vehicles and robots at
+  centimeter- to millimeter-scale precision. Two product lines are on sale today: MILO,
+  a sub-millimeter positioning system for industrial automation and in-motion robotics,
+  advertised as compatible with Yaskawa, Mitsubishi Electric, FANUC, Universal Robots
+  and KUKA; and Mobility, a rail and transit portfolio covering the FOCUS track-geometry
+  monitoring kit and the Humatics Rail Navigation System (HRNS), used on New York City
+  MTA subway signalling projects. Humatics publishes no developer portal, no API documentation
+  and no machine-readable description of any product API. Two rounds of probing humatics.com
+  returned HTTP 404 for every /.well-known/ path, /llms.txt, /openapi.json, /openapi.yaml,
+  /swagger.json, /api-docs and /graphql; *.humatics.com is a DNS wildcard onto one retired
+  address, so api., docs., developer., portal. and status. resolve but time out on connect.
+  The only machine-readable HTTP interface on any Humatics host is the WordPress REST API of
+  the marketing site itself at humatics.com/wp-json/ — 375 routes across 19 stock core and
+  commercial-plugin namespaces, exposing pages and posts rather than positioning, and so
+  recorded as evidence rather than catalogued as a Humatics API. The GitHub organization
+  github.com/Humatics is real and public, but 31 of its 33 repositories are forks of
+  third-party embedded and robotics open source (Fast-RTPS, Fast-CDR, FreeRTOS, Orange Pi
+  BSP, Yocto meta-layers, EIPScanner, donkeycar); the two non-forks are internal tools. There
+  is no first-party SDK, client library or specification, and no package named humatics exists
+  on npm or PyPI. Marketing material for the earlier KinetIQ OS / Spatial Intelligence Platform
+  referenced an "extensible API", but no public interface for it was ever documented, and the
+  news host that carried those announcements (now.humatics.com) no longer answers.'
+image: https://humatics.com/wp-content/uploads/2025/04/humatics.png
 url: https://raw.githubusercontent.com/api-evangelist/humatics/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
 specificationVersion: '0.20'
 created: '2026-08-04'
 modified: '2026-08-04'
 tags:
 - Company
+- Positioning
+- Microlocation
+- Ultra-Wideband
+- Sensors
+- Navigation
+- Robotics
+- Industrial Automation
+- Rail
+- Transit
+- Manufacturing
+- Hardware
 apis: []
 maintainers:
 - FN: Kin Lane
@@ -20,4 +53,44 @@ maintainers:
   email: info@apis.io
 common:
 - type: Website
+  url: https://humatics.com/
+- type: SecondaryMarket
   url: https://www.hiive.com/securities/humatics-stock
+- type: GitHubOrganization
+  url: https://github.com/Humatics
+- type: Careers
+  url: https://humatics.breezy.hr/
+- type: Contact
+  url: https://humatics.com/contact/
+- type: About
+  url: https://humatics.com/about/
+- type: Product
+  name: MILO — automation and robotics positioning
+  url: https://humatics.com/milo/
+- type: Product
+  name: Mobility — rail and transit positioning
+  url: https://humatics.com/mobility/
+- type: TermsOfService
+  url: https://humatics.com/terms-of-use/
+- type: PrivacyPolicy
+  url: https://humatics.com/privacy-policy/
+- type: LinkedIn
+  url: https://www.linkedin.com/company/humatics-corporation/
+- type: LLMsTxt
+  url: llms/humatics-llms.txt
+- type: DomainSecurity
+  url: security/humatics-domain-security.yml
+x-enrichment:
+  date: '2026-08-04'
+  status: enriched
+  artifacts_added: 4
+  artifacts_updated: 3
+  rounds: 2
+  pass: local-v1
+  note: >-
+    Round 2 re-ran contract discovery independently and reconfirmed that Humatics ships no
+    product API, no spec, no MCP server and no A2A agent card. It corrected three round-1
+    facts (wildcard DNS rather than NXDOMAIN on api./docs./developer.; an unpublished Zendesk
+    rather than a Cloudflare 1034 on support.; a live WordPress REST API at /wp-json/) and
+    recorded the npm, PyPI, GitHub-org and blog-feed searches that came back empty. No new
+    scored pointer was wired, because nothing Humatics publishes earns one.
