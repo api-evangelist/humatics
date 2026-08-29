@@ -25,6 +25,17 @@ description: 'Humatics Corporation is a Waltham, Massachusetts microlocation com
   on npm or PyPI. Marketing material for the earlier KinetIQ OS / Spatial Intelligence Platform
   referenced an "extensible API", but no public interface for it was ever documented, and the
   news host that carried those announcements (now.humatics.com) no longer answers.'
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: medium
+  source:
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://humatics.com/wp-content/uploads/2025/04/humatics.png
 url: https://raw.githubusercontent.com/api-evangelist/humatics/refs/heads/main/apis.yml
 x-type: company
