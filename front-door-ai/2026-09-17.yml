@@ -1,0 +1,26 @@
+# Front Door AI Index — humatics — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: humatics
+  lexicon_version: '1.0'
+  probed_at: '2026-09-17'
+  host: humatics.com
+  final_host: humatics.com
+  ownership: own
+  owner: humatics
+  shares_host_with: null
+  inherited_from: null
+  verdict: silent
+  score: 0
+  host_score: 0
+  density: 0.0
+  words: 283
+  tiers:
+    agentic: 0
+    core: 0
+    model: 0
+  ambiguous: 9
+  top_terms:
+    automation: 7
+    predictive: 2
